@@ -32,7 +32,7 @@ API_VERSION=1.0.0
 API_PREFIX=/api/v1
 IMPORT_BATCH_SIZE=10000
 IMPORT_MAX_PARALLEL_JOBS=4
-DATA_DIR=d:\IPNG_NEW\Project\new\temp_extract
+DATA_DIR=./data/temp_extract
 ```
 
 ### 3. Run the API

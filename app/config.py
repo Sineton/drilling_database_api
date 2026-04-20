@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     import_max_parallel_jobs: int = 4
     
     # Data directory
-    data_dir: str = r"d:\IPNG_NEW\Project\new\temp_extract"
+    data_dir: str = "./data/temp_extract"
     
     class Config:
         env_file = ".env"
