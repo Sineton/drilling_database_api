@@ -149,6 +149,3 @@ curl -X POST "http://localhost:8000/api/v1/import/las" \
 ## Notes
 
 - Interactive API docs are available via FastAPI at `docs` and `redoc`.
-- Do not store real `.env` files, production database credentials, or internal addresses in the repository.
-- Use git commands from the `api` directory when maintaining this project as a standalone repository.
-- Release history is tracked in `CHANGELOG.md`.
