@@ -1,26 +1,26 @@
-# API Documentation
+# Drilling Database API
 
-FastAPI сервис для импорта и обработки данных по скважинам, LAS-файлам, Excel-реестрам, журналам супервайзера и разметке.
+FastAPI service for importing and processing well data, LAS files, Excel registries, supervisor journals, and markup datasets.
 
-## Что умеет API
+## Features
 
-- управлять справочником скважин и стволов;
-- импортировать LAS из локального пути, URL и пакетно из папки;
-- импортировать Excel-файлы со скважинами и событиями;
-- импортировать журналы супервайзера и разметку из `.xlsx`;
-- строить выборки для аналитики и обучения.
+- Manage wells and wellbores.
+- Import LAS files from local paths, URLs, or folders in batch mode.
+- Import wells and events from Excel files.
+- Import supervisor journals and markup data from `.xlsx` files.
+- Build datasets for analytics and ML workflows.
 
-## Быстрый старт
+## Quick Start
 
-### 1. Установка
+### 1. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Настройка окружения
+### 2. Configure environment
 
-Скопируйте `.env.example` в `.env` и заполните свои значения:
+Copy `.env.example` to `.env` and update the values for your environment:
 
 ```env
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres
@@ -35,96 +35,96 @@ IMPORT_MAX_PARALLEL_JOBS=4
 DATA_DIR=d:\IPNG_NEW\Project\new\temp_extract
 ```
 
-### 3. Запуск
+### 3. Run the API
 
 ```bash
 python run.py
 ```
 
-После запуска:
+After startup:
 
 - Swagger UI: `http://localhost:8000/docs`
 - ReDoc: `http://localhost:8000/redoc`
 - API base URL: `http://localhost:8000/api/v1`
 - Health check: `http://localhost:8000/health`
 
-## Основные эндпоинты
+## Main Endpoints
 
-### Служебные
+### Service
 
-- `GET /` - краткая информация о сервисе
-- `GET /health` - проверка доступности API
+- `GET /` - basic service information
+- `GET /health` - health check
 
 ### Wells
 
-- `GET /api/v1/wells/overview` - обзор активных скважин
-- `GET /api/v1/wells/{well_number}/parameters` - параметры скважины по временному окну
-- `GET /api/v1/wells` - список скважин с фильтрами
-- `GET /api/v1/wells/{well_id}` - карточка скважины
-- `POST /api/v1/wells` - создание скважины
-- `PUT /api/v1/wells/{well_id}` - обновление скважины
-- `DELETE /api/v1/wells/{well_id}` - удаление скважины
-- `POST /api/v1/wells/{well_id}/wellbores` - создание ствола
+- `GET /api/v1/wells/overview` - overview of active wells
+- `GET /api/v1/wells/{well_number}/parameters` - well parameters for a time window
+- `GET /api/v1/wells` - list wells with filters
+- `GET /api/v1/wells/{well_id}` - get well details
+- `POST /api/v1/wells` - create a well
+- `PUT /api/v1/wells/{well_id}` - update a well
+- `DELETE /api/v1/wells/{well_id}` - delete a well
+- `POST /api/v1/wells/{well_id}/wellbores` - create a wellbore
 
 ### Events
 
-- `GET /api/v1/events/types` - список типов событий
-- `POST /api/v1/events/types` - создание типа события
-- `GET /api/v1/events` - список событий с фильтрами
-- `POST /api/v1/events` - создание события
-- `GET /api/v1/events/{event_id}` - получение события
-- `DELETE /api/v1/events/{event_id}` - удаление события
-- `POST /api/v1/events/sync-from-supervisor` - заполнение событий из `sv_daily_operations`
+- `GET /api/v1/events/types` - list event types
+- `POST /api/v1/events/types` - create an event type
+- `GET /api/v1/events` - list events with filters
+- `POST /api/v1/events` - create an event
+- `GET /api/v1/events/{event_id}` - get event details
+- `DELETE /api/v1/events/{event_id}` - delete an event
+- `POST /api/v1/events/sync-from-supervisor` - create events from `sv_daily_operations`
 
-### Import LAS
+### LAS Import
 
-- `POST /api/v1/import/las/parse` - предварительный разбор LAS
-- `POST /api/v1/import/las/from-url` - импорт LAS по URL
-- `POST /api/v1/import/las` - импорт LAS по локальному пути
-- `POST /api/v1/import/las/batch` - пакетный импорт из папки
-- `GET /api/v1/import/las/status/{job_id}` - статус задания
-- `GET /api/v1/import/las/batch/{batch_id}` - статус пакетного импорта
-- `GET /api/v1/import/las/stream/{job_id}` - поток прогресса через SSE
+- `POST /api/v1/import/las/parse` - preview a LAS file
+- `POST /api/v1/import/las/from-url` - import a LAS file from URL
+- `POST /api/v1/import/las` - import a LAS file from local path
+- `POST /api/v1/import/las/batch` - batch import LAS files from a folder
+- `GET /api/v1/import/las/status/{job_id}` - get job status
+- `GET /api/v1/import/las/batch/{batch_id}` - get batch import status
+- `GET /api/v1/import/las/stream/{job_id}` - stream progress via SSE
 
-### Import Excel
+### Excel Import
 
-- `POST /api/v1/import/excel/parse` - предварительный разбор Excel
-- `POST /api/v1/import/excel/wells` - импорт скважин
-- `POST /api/v1/import/excel/events` - импорт событий
+- `POST /api/v1/import/excel/parse` - preview an Excel file
+- `POST /api/v1/import/excel/wells` - import wells from Excel
+- `POST /api/v1/import/excel/events` - import events from Excel
 
-### Import Supervisor Journal
+### Supervisor Journal Import
 
-- `POST /api/v1/import/sv-journal/parse` - preview журнала
-- `POST /api/v1/import/sv-journal/import` - полный импорт журнала
-- `POST /api/v1/import/sv-journal/import-by-path` - импорт по пути из JSON
-- `GET /api/v1/import/sv-journal/overview/{well_number}` - обзор по скважине
-- `GET /api/v1/import/sv-journal/reports/{well_number}` - отчеты по скважине
-- `GET /api/v1/import/sv-journal/operations/{report_id}` - операции из отчета
-- `GET /api/v1/import/sv-journal/npv/{well_number}` - баланс НПВ
-- `POST /api/v1/import/sv-journal/final/parse` - preview итогового файла
-- `POST /api/v1/import/sv-journal/final/import` - импорт итогового файла
-- `POST /api/v1/import/sv-journal/otchet/parse` - preview листа отчета
-- `POST /api/v1/import/sv-journal/otchet/import` - импорт листа отчета
+- `POST /api/v1/import/sv-journal/parse` - preview a supervisor journal
+- `POST /api/v1/import/sv-journal/import` - import a supervisor journal
+- `POST /api/v1/import/sv-journal/import-by-path` - import by server-side file path
+- `GET /api/v1/import/sv-journal/overview/{well_number}` - journal overview by well
+- `GET /api/v1/import/sv-journal/reports/{well_number}` - reports by well
+- `GET /api/v1/import/sv-journal/operations/{report_id}` - operations from a report
+- `GET /api/v1/import/sv-journal/npv/{well_number}` - NPV balance by well
+- `POST /api/v1/import/sv-journal/final/parse` - preview final journal file
+- `POST /api/v1/import/sv-journal/final/import` - import final journal file
+- `POST /api/v1/import/sv-journal/otchet/parse` - preview report sheet
+- `POST /api/v1/import/sv-journal/otchet/import` - import report sheet
 
 ### Supervisor Events
 
-- `POST /api/v1/sv-events/fill/{well_number}` - заполнить `events` по `sv_*`
-- `POST /api/v1/sv-events/cleanup/{well_number}` - удалить автосгенерированные события
-- `POST /api/v1/sv-events/rebuild/{well_number}` - пересобрать события по скважине
-- `POST /api/v1/sv-events/diagnose/{well_number}` - диагностика причин пропуска событий
+- `POST /api/v1/sv-events/fill/{well_number}` - fill `events` from `sv_*` tables
+- `POST /api/v1/sv-events/cleanup/{well_number}` - remove auto-generated events
+- `POST /api/v1/sv-events/rebuild/{well_number}` - rebuild events for a well
+- `POST /api/v1/sv-events/diagnose/{well_number}` - diagnose missing event creation
 
 ### Analytics and Datasets
 
-- `GET /api/v1/analytics/anomalies` - аномалии по скважине
-- `GET /api/v1/analytics/field-summary` - сводка по месторождению
-- `POST /api/v1/datasets/stuck-pipe-training` - собрать датасет для обучения
+- `GET /api/v1/analytics/anomalies` - get anomalies for a well
+- `GET /api/v1/analytics/field-summary` - field summary
+- `POST /api/v1/datasets/stuck-pipe-training` - build a stuck pipe training dataset
 
-### Import Markup
+### Markup Import
 
-- `POST /api/v1/import/markup/parse` - preview файла разметки
-- `POST /api/v1/import/markup` - импорт разметки в БД
+- `POST /api/v1/import/markup/parse` - preview a markup file
+- `POST /api/v1/import/markup` - import markup into the database
 
-## Примеры запросов
+## Example Requests
 
 ### Health check
 
@@ -132,13 +132,13 @@ python run.py
 curl http://localhost:8000/health
 ```
 
-### Импорт LAS по URL
+### Import LAS from URL
 
 ```bash
 curl -X POST "http://localhost:8000/api/v1/import/las/from-url?url=https://example.com/file.las&well_number=10767A&create_well=true"
 ```
 
-### Импорт LAS по локальному пути
+### Import LAS from local path
 
 ```bash
 curl -X POST "http://localhost:8000/api/v1/import/las" \
@@ -146,8 +146,9 @@ curl -X POST "http://localhost:8000/api/v1/import/las" \
   -d "{\"file_path\":\"d:\\\\data\\\\file.las\",\"well_number\":\"10767A\",\"create_well\":true}"
 ```
 
-## Важные замечания
+## Notes
 
-- Интерактивная спецификация уже доступна через FastAPI в `docs` и `redoc`.
-- Для публикации на GitHub не храните реальный `.env`, пароли БД и внутренние адреса в markdown или коде.
-- Если нужно публиковать проект как отдельный репозиторий, достаточно выполнять git-команды из каталога `api`.
+- Interactive API docs are available via FastAPI at `docs` and `redoc`.
+- Do not store real `.env` files, production database credentials, or internal addresses in the repository.
+- Use git commands from the `api` directory when maintaining this project as a standalone repository.
+- Release history is tracked in `CHANGELOG.md`.
