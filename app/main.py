@@ -1,5 +1,5 @@
 """
-PAK PA PPR Import API - Main Application
+ИС ПОАС API - Main Application
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -80,9 +80,9 @@ app = FastAPI(
     title=settings.api_title,
     version=settings.api_version,
     description="""
-## PAK PA PPR Import API
+## ИС ПОАС API
 
-API для импорта данных ГТИ (геолого-технологических исследований) в базу данных ПАК ПА и ППР.
+API для импорта данных ГТИ (геолого-технологических исследований) в базу данных ИС ПОАС.
 
 ### Возможности:
 
@@ -131,7 +131,7 @@ app.include_router(import_markup_router, prefix=settings.api_prefix)
 def root():
     """Root endpoint"""
     return {
-        "message": "PAK PA PPR Import API",
+        "message": "ИС ПОАС API",
         "version": settings.api_version,
         "docs": "/docs"
     }

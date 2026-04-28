@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     api_host: str = "0.0.0.0"
     api_port: int = 8000
     api_debug: bool = True
-    api_title: str = "PAK PA PPR Import API"
+    api_title: str = "ИС ПОАС API"
     api_version: str = "1.0.0"
     api_prefix: str = "/api/v1"
     
